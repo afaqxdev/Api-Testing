@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:api/First_Example/First_Model.dart';
+import 'package:api/Four_Example/Model.dart';
 import 'package:api/Quran/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -27,6 +28,7 @@ class _QuranState extends State<Quran> {
     }
   }
 
+  final List<ModelQuran> name = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +42,12 @@ class _QuranState extends State<Quran> {
             Expanded(
                 child: FutureBuilder<ModelQuran>(
                     future: model(),
-                    builder: (context, snapshot) {
+                    builder: (context, AsyncSnapshot<ModelQuran> snapshot) {
                       if (!snapshot.hasData) {
                         return ListView.builder(
-                          itemCount: snapshot.data?.data?.surahs!.length,
+                          itemCount: snapshot.data!.data!.surahs!.length,
                           itemBuilder: (context, index) {
-                            var data = snapshot.data;
-                            return Text(data!.code!.toString().toString());
+                            return Text(index.toString());
                           },
                         );
                       } else {

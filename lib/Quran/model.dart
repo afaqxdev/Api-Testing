@@ -188,14 +188,14 @@ class ModelQuran {
 
   ModelQuran({this.code, this.status, this.data});
 
-  ModelQuran.fromJson(Map<String, dynamic> json) {
+  ModelQuran.fromJson(Map<dynamic, dynamic> json) {
     code = json['code'];
     status = json['status'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<String, dynamic>();
     data['code'] = this.code;
     data['status'] = this.status;
     if (this.data != null) {

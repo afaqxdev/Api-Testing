@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:api/First_Example/First_Model.dart';
-import 'package:api/Four_Example/Model.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:api/Quran/model.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,21 +14,7 @@ class Quran extends StatefulWidget {
 }
 
 class _QuranState extends State<Quran> {
-  Future<ModelQuran> model() async {
-    final response = await http
-        .get(Uri.parse("http://api.alquran.cloud/v1/quran/quran-uthmani"));
-    var data = jsonDecode(response.body.toString());
-
-    if (response.statusCode == 200) {
-      print(response.statusCode);
-
-      return ModelQuran.fromJson(data);
-    } else {
-      return ModelQuran.fromJson(data);
-    }
-  }
-
-  final List<ModelQuran> name = [];
+  final play = AudioPlayer();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,21 +25,23 @@ class _QuranState extends State<Quran> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Expanded(
-                child: FutureBuilder<ModelQuran>(
-                    future: model(),
-                    builder: (context, AsyncSnapshot<ModelQuran> snapshot) {
-                      if (!snapshot.hasData) {
-                        return ListView.builder(
-                          itemCount: snapshot.data!.data!.surahs!.length,
-                          itemBuilder: (context, index) {
-                            return Text(index.toString());
-                          },
-                        );
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    })),
+            ElevatedButton(
+                onPressed: () {
+                  play.play(AssetSource('assets/audio/2pac-509.mp3'));
+                },
+                child: Text("play")),
+            ElevatedButton(
+                onPressed: () {
+                  play.pause();
+                },
+                child: Text("pause")),
+
+            ElevatedButton(
+                onPressed: () {
+                  play.resume();
+                },
+                child: Text("resume")),
+            //         })),
           ],
         ),
       ),
@@ -73,6 +61,19 @@ class customRow extends StatelessWidget {
           style: TextStyle(fontSize: 19),
         ),
       ],
+    );
+  }
+}
+
+class Quick {
+  static costumSnackbar(
+      String title, BuildContext context, QuickAlertType name) {
+    return QuickAlert.show(
+      context: context,
+      type: name,
+      title: title,
+      backgroundColor: Colors.grey.shade700,
+      titleColor: Colors.white,
     );
   }
 }

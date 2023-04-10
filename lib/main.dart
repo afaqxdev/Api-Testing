@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             // home: first_api(),
             // home: News(),
             // home: project(),
-            home: Quran(),
+            home: QiblahScreen(),
             // home: second_text(),
             // home: first_test(),
             // home: ApiResponse(),

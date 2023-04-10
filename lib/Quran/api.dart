@@ -1,79 +1,69 @@
-import 'dart:convert';
+import 'dart:math';
 
-import 'package:quickalert/quickalert.dart';
-import 'package:api/Quran/model.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_qiblah/flutter_qiblah.dart';
 
-class Quran extends StatefulWidget {
-  const Quran({super.key});
+class QiblahScreen extends StatefulWidget {
+  const QiblahScreen({super.key});
 
   @override
-  State<Quran> createState() => _QuranState();
+  State<QiblahScreen> createState() => _QiblahScreenState();
 }
 
-class _QuranState extends State<Quran> {
-  final play = AudioPlayer();
+Animation<double>? animation;
+AnimationController? _animationController;
+double begin = 0.0;
+
+class _QiblahScreenState extends State<QiblahScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    animation = Tween(begin: 0.0, end: 0.0).animate(_animationController!);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("Testing")),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  play.play(AssetSource('assets/audio/2pac-509.mp3'));
-                },
-                child: Text("play")),
-            ElevatedButton(
-                onPressed: () {
-                  play.pause();
-                },
-                child: Text("pause")),
+    return SafeArea(
+      child: Scaffold(
+        body: StreamBuilder(
+          stream: FlutterQiblah.qiblahStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: Colors.grey,
+                ),
+              );
+            }
 
-            ElevatedButton(
-                onPressed: () {
-                  play.resume();
-                },
-                child: Text("resume")),
-            //         })),
-          ],
+            final qiblahDirection = snapshot.data;
+            animation = Tween(
+              begin: begin,
+              end: (qiblahDirection!.qiblah * (pi / 180) * -1),
+            ).animate(_animationController!);
+            begin = (qiblahDirection.qiblah * (pi / 180) * -1);
+            _animationController!.forward(from: 0);
+
+            return Center(
+              child: SizedBox(
+                child: AnimatedBuilder(
+                  animation: animation!,
+                  builder: (context, child) => Transform.rotate(
+                    angle: animation!.value,
+                    child: Image.asset(
+                      'images/qibla_image.png',
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
-    );
-  }
-}
-
-class customRow extends StatelessWidget {
-  customRow({required this.name, super.key});
-  final String name;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          name,
-          style: TextStyle(fontSize: 19),
-        ),
-      ],
-    );
-  }
-}
-
-class Quick {
-  static costumSnackbar(
-      String title, BuildContext context, QuickAlertType name) {
-    return QuickAlert.show(
-      context: context,
-      type: name,
-      title: title,
-      backgroundColor: Colors.grey.shade700,
-      titleColor: Colors.white,
     );
   }
 }

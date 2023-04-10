@@ -48,13 +48,15 @@ dependencies:
   ndialog: ^4.1.1+1
   dropdown_button2: ^1.8.1
   image_picker: ^0.8.5+3
-  lottie: ^1.4.3
   shared_preferences: ^2.0.15
   http: ^0.13.5
   quickalert: ^1.0.0
   countdown_progress_indicator: ^0.1.2
   shifting_tabbar: ^1.0.2
   audioplayers: ^3.0.1
+  lottie: ^2.3.1
+  flutter_qiblah: ^2.1.0
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:

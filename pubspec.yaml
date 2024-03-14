@@ -50,6 +50,7 @@ dependencies:
   image_picker: ^0.8.5+3
   shared_preferences: ^2.0.15
   http: ^0.13.5
+  provider: ^6.0.5
   quickalert: ^1.0.0
   countdown_progress_indicator: ^0.1.2
   shifting_tabbar: ^1.0.2
